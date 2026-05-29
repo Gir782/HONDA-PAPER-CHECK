@@ -32,7 +32,7 @@ def clean_columns(df,cols):
 #--------Cth_Master_link=r"\\192.168.1.10\Status\2.E-Way_Bill_SEA\1 GIRISH-------HMI--------PAPERS\HSN MASTER applicable updated  23 11 2024 onwards..xlsx"
 Cth_Master_link=r"\\192.168.1.10\Status\2.E-Way_Bill_SEA\1 GIRISH-------HMI--------PAPERS\HSN MASTER applicable updated  23 11 2024 onwards..xlsx"
 Cth_Master_link=pd.read_excel(Cth_Master_link,sheet_name="HMI CTH",usecols=["PART NO","DESCRIPTION","HSN Code"]).drop_duplicates(subset="PART NO",keep="first")
-job_data=pd.read_excel(job_link,sheet_name="Product Jobwise",usecols=["Material Description","Cth No"])
+job_data=pd.read_excel(job_link,sheet_name="Product Jobwise",usecols=["Material Description","Cth No","Inv No","Sequence Number"])
 job_data["U_code"]=job_data["Material Description"].astype(str).str.split(" ").str[0]
 
 #------------------------------Checking_CTH------------------------#
@@ -43,6 +43,8 @@ Cth_check2=Cth_check[Cth_check["Cth No"]
 
 if not Cth_check2.empty:
     print(Cth_check2)
+    Cth_check2.to_excel(fr"C:\Users\Girish\Desktop\{job_no} ERROS.xlsx")
+    
 else:
     print("------------------------CTH CHECKED\n----------------------CTH IS OK")
     pass
@@ -162,14 +164,19 @@ if not filtered_c.empty:
 else:
     print("NO SIMS, NFMIMS, PIMS REQUIRED")
 
-#------------------------------  END ---------------------------
 
+#------------------------------  DES CONTAINS #N/A ---------------------------
+datal=pd.read_excel(job_link,usecols=["Inv No","Material Description"])
 
+datal1=datal[datal["Material Description"].str.contains("#N/A",case=False,na=False)]
 
+if not datal1.empty:
+    print("--------------------------------N/a in Descripton")
+    print(datal1)
+else:
+    pass
 
-
-
-
+#-------------------AIFTA/CEPA QTY CHECK WITH ITEMS--------------------------
 
 
 
