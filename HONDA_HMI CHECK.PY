@@ -175,6 +175,14 @@ if not datal1.empty:
     print(datal1)
 else:
     pass
+#---------------------------- CHECKING IF INV NO. CONTAINES NO MORE THAN 1 SAME END USE DES.
+Inv_enduse_check=pd.read_excel(job_link,usecols=["Material Description","Inv No"])
+Inv_enduse_check["End use des"]=Inv_enduse_check["Material Description"].astype(str).str.extract(r'(\([^()]*\))$')
+inInv_enduse_check=Inv_enduse_check.drop_duplicates(subset=["Inv No","End use des"],keep="first",inplace=True)
+print(Inv_enduse_check[["Inv No","End use des"]])
+
+
+
 
 #-------------------AIFTA/CEPA QTY CHECK WITH ITEMS--------------------------
 
