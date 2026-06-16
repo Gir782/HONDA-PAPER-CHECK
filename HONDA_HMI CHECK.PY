@@ -188,8 +188,6 @@ inInv_enduse_check=Inv_enduse_check.drop_duplicates(subset=["Inv No","End use de
 print(Inv_enduse_check[["Inv No","End use des"]])
 
 
-#-------------------AIFTA/CEPA QTY CHECK WITH ITEMS--------------------------
-Fta_Notification=["046/2011",069/2011]
 
 
 
