@@ -23,36 +23,39 @@ cond1 = (
     Data1["Product Desc"].str.contains("resistor", case=False, na=False) &
     (Data1["CTH"] == 85334030)
 )
-cond2 = Data1["Product Desc"].str.contains(
-    "JDM-SMT RESISTOR|IC-POLYMER|IC-MICROCONTROLLER|JDM-FILTER|JDM-DUPLEXER|JDM-RF FILTER",
-    case=False,
-    na=False
-)
+cond2=((Data1["CTH"]==85045090)
+       &
+       (Data1["Product Desc"].str.contains("Resistor",case=False,na=False)))
+
+
 cond3 = (
     Data1["Product Desc"].str.contains("SM-X|SM-T", case=False, na=False) &
     Data1["Product Desc"].str.contains("MOBILE", case=False, na=False)
 )
 
+Cond4=(Data1["Product Desc"].str.contains("SM-A|SM-E|SM-M|SM-F",case=False,na=False)
+    &
+    Data1["Product Desc"].str.contains("Tablet|Watch",case=False,na=False))
 
-
-
-
-
-Data1["Reason"] = np.select(
-    [cond1, cond2, cond3],
-    [
-        "REV REQ. Resistor Mismatch with CTH",
-        "Add letter in esanchit of given Items",
-        "SM-T and Mobile phone in Same Desription"
-    ],
-    default=""
+Cond5 = Data1["Product Desc"].str.contains(
+    "JDM-SMT RESISTOR|IC-POLYMER|IC-MICROCONTROLLER|JDM-FILTER|JDM-DUPLEXER|JDM-RF FILTER",
+    case=False,
+    na=False
 )
 
 
-
-
-
-
+Data1["Reason"] = np.select(
+    [cond1, cond2, cond3,Cond4,Cond5],
+    [
+        "REV REQ. Resistor Mismatch with CTH",
+        "Resistor cannot go in Cth 85045090",
+        "SM-T and Mobile phone in Same Desription",
+        "Should be moble phone but its table/watch",
+        "Add letter in esanchit of given Items"
+        
+    ],
+    default=""
+)
 
 
 filterd_Data = Data1[Data1["Reason"] != ""].drop_duplicates(

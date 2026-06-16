@@ -97,6 +97,8 @@ errors_df = final_df[final_df["Error"] != "OK"]
 
 if not errors_df.empty:
     print(errors_df)
+    print("send to downloads with job no. ")
+    errors_df.to_excel(fr"C:\Users\Girish\Downloads\{job_link}.xlsx")
 else:
     print(BRIGHT_GREEN+"Basic notification igst uqc checked everyting is ok"+RESET)
 
@@ -111,26 +113,30 @@ print("---------------Country of Origin Data---------------\n",CTH_DATA[["Cont O
 
 
 def check_imp_conditons(df):
-    conditions=[
-        (df["Cth No"].astype(str).str.startswith("94"))
+    conditions=[(
+        (df["Cth No"].astype(str).str.startswith("94")))
         &
-        (df["Aidc Sno"]!='16D')
-        &
-        (df["Social Welfare Rta"]!=0),
+        ((df["Aidc Sno"]!='16D')
+        |
+        (df["Social Welfare Rta"]!=0)),
 # condtion 2
-        (df["Cth No"].astype(str).str.startswith("64"))
+        ((df["Cth No"].astype(str).str.startswith("64")))
         &
-        (df["Aidc Sno"]!="14A")
-        &
-        (df["Social Welfare Rta"]!=0),
+        ((df["Aidc Sno"]!="14A")
+        |
+        (df["Social Welfare Rta"]!=0)),
 #condiiton 3
         (df["Sqc Unit"]=="NOS")
         &
         (df["Sqc Qty"]!=df["Material Quantity"])
         ]
-    choices=["Error in Cth startwith 94","Error in CtH startswith 64","NOS mismatch"]
+    choices=["Error in Cth startwith 94",
+             "Error in CtH startswith 64",
+             "NOS mismatch"]
     df["Error"]=np.select(conditions,choices,default="ok")
     return df
+
+
 
 chechcth94=check_imp_conditons(IDATA)
 
@@ -182,11 +188,8 @@ inInv_enduse_check=Inv_enduse_check.drop_duplicates(subset=["Inv No","End use de
 print(Inv_enduse_check[["Inv No","End use des"]])
 
 
-
-
 #-------------------AIFTA/CEPA QTY CHECK WITH ITEMS--------------------------
-
-
+Fta_Notification=["046/2011",069/2011]
 
 
 
